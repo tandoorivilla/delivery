@@ -701,16 +701,36 @@ const firebaseConfig = {
   }
 
   function populateUserDropdown() {
-    const usernameSelect = document.getElementById('usernameSelect');
-    let html = `<option value="">-- Select Username --</option>`;
-    Object.entries(allUsers).forEach(([id, user]) => {
-      html += `<option value="${user.name}" data-id="${id}">${user.name}</option>`;
-    });
-    usernameSelect.innerHTML = html + `<option value="admin">admin</option>`;
-    document.getElementById('pinInput').value = "";
-    document.getElementById('pinInput').disabled = true;
-  }
+  const usernameSelect = document.getElementById('usernameSelect');
+  // Clear existing options
+  usernameSelect.innerHTML = '';
 
+  // Placeholder option
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = '-- Select Username --';
+  usernameSelect.appendChild(placeholder);
+
+  // Add users from allUsers (if any)
+  Object.entries(allUsers).forEach(([id, user]) => {
+    const opt = document.createElement('option');
+    opt.value = user.name;
+    opt.textContent = user.name;
+    // store id in dataset for later use if needed
+    opt.dataset.id = id;
+    usernameSelect.appendChild(opt);
+  });
+
+  // Always append admin option (last)
+  const adminOpt = document.createElement('option');
+  adminOpt.value = 'admin';
+  adminOpt.textContent = 'admin';
+  usernameSelect.appendChild(adminOpt);
+
+  // Reset PIN input state
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinInput').disabled = true;
+}
   // Initialize data and UI
   getUsersFromFirebase();
 
