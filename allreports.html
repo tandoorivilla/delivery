@@ -562,16 +562,17 @@
     }
     const currentAdmin = userData.name || 'admin';
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCirYQ_46JiSkMIwCNs1nSi89dvB1MUg_A",
-      authDomain: "deliverylog12.firebaseapp.com",
-      databaseURL: "https://deliverylog12-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "deliverylog12",
-      storageBucket: "deliverylog12.firebasestorage.app",
-      messagingSenderId: "19081371357",
-      appId: "1:19081371357:web:b9b59e732a4d90d4d44534",
-      measurementId: "G-FSZXXZQSL0"
-    };
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyB5p2CC7u-q3UIcbtiPHp9I1MNtmgLsXVU",
+  authDomain: "deliverytandoorivilla.firebaseapp.com",
+  databaseURL: "https://deliverytandoorivilla-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "deliverytandoorivilla",
+  storageBucket: "deliverytandoorivilla.firebasestorage.app",
+  messagingSenderId: "770141547396",
+  appId: "1:770141547396:web:6644ae7e697730c392cbd1",
+  measurementId: "G-0E52P9BWKL"
+};
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
