@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>Delivery Drivers Log – Ravintola Tandoori Villa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <style>
+    :root {
+      --main-bg: linear-gradient(135deg, #0d47a1 0%, #000 100%);
+      --card-bg: #181c24;
+      --primary: #42a5f5;
+      --primary-hover: #1976d2;
+      --accent: #bbdefb;
+      --border: #212a40;
+      --red: #ff3b30;
+      --gap: 24px;
+      --card-radius: 15px;
+      --green: #33ff58;
+    }
+    html, body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      background: var(--main-bg);
+      box-sizing: border-box;
+      width: 100vw;
+      font-family: 'Poppins', Arial, sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+    body {
+      width: 100vw;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      margin: 0;
+      padding: 0;
+    }
+    .page-wrapper {
+      width: 100vw;
+      max-width: 100vw;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .header {
+      width: 100%;
+      background: var(--card-bg);
+      color: var(--accent);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 19px 16px 12px 16px;
+      margin: 0 0 var(--gap) 0;
+      margin-top: 24px;
+      border-radius: var(--card-radius);
+      box-shadow: 0 2px 9px rgba(66, 165, 245, 0.08);
+      min-height: 43px;
+      letter-spacing: 0.03em;
+      max-width: 1100px;
+      align-self: center;
+    }
+    .header-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .header-title {
+      font-size: 1.17rem;
+      font-weight: 800;
+      color: #fff;
+      font-family: 'Poppins', Arial, sans-serif;
+      letter-spacing: 0.03em;
+      text-shadow: 0 2px 12px #009de044;
+      white-space: nowrap;
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6em;
+    }
+    .header-desc {
+      font-size: 0.99em;
+      font-weight: 500;
+      color: #bbdefb;
+      opacity: 0.88;
+      margin-left: 18px;
+      font-family: 'Poppins', Arial, sans-serif;
+      letter-spacing: 0.01em;
+      text-align: center;
+      flex: none;
+      display: inline-block;
+      white-space: normal;
+      max-width: 68vw;
+    }
+    .header-btnbar { 
+      display: flex; 
+      gap: 16px; 
+      margin-top: 12px; 
+      margin-bottom: 0; 
+    }
+    .header-btnbar button { 
+      font-size: 1em; 
+      font-family: 'Poppins', Arial, sans-serif; 
+      font-weight: 700; 
+      background: var(--primary); 
+      color: #fff; 
+      border: none; 
+      border-radius: 9px; 
+      padding: 8px 20px; 
+      cursor: pointer; 
+      transition: background 0.16s;
+    }
+    .header-btnbar button:hover { background: var(--primary-hover);}
+    .header-btnbar .logout-btn { background: var(--red);}
+    .header-btnbar .logout-btn:hover { background: #c11;}
+    .header-btnbar .reports-btn { background: var(--primary);}
+    .log-board {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--gap);
+      width: 100vw;
+      max-width: 1100px;
+      align-items: stretch;
+      margin: 0 auto 17px auto;
+      padding: 0 12px;
+      box-sizing: border-box;
+      justify-items: center;
+      overflow-x: hidden;
+    }
+    @media (max-width: 900px) {
+      .log-board { grid-template-columns: 1fr; }
+      .driver-card { min-width: 98vw; max-width: 98vw; font-size: 0.97em; }
+    }
+    @media (max-width: 650px) {
+      .driver-fields-2rows {grid-template-columns: 1fr; grid-template-rows: 1fr 1fr 1fr 1fr;}
+    }
+    @media (max-width: 450px) {
+      html, body { font-size: 14px; }
+      .driver-card-header, .driver-fields-2rows, .driver-btns, .driver-km-result {padding-left:4px;padding-right:4px;}
+      .driver-card { font-size: 0.93em;}
+    }
+    .driver-card {
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      box-shadow: 0 2px 8px rgba(66,165,245,0.08);
+      border: 2px solid var(--border);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      max-width: 100%;
+      font-size: 0.97rem;
+      position: relative;
+      margin-bottom: 0;
+      margin-top: 16px;
+      margin-bottom: 16px;
+      word-break: break-word;
+      transition: border 0.13s, box-shadow 0.13s;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .driver-card.active {
+      border: 2.2px solid var(--primary);
+      box-shadow: 0 2px 12px #42a5f52a;
+    }
+    .driver-card-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 12px 18px 8px 18px;
+      background: #0d47a1;
+      color: var(--accent);
+      font-size: 1.07em;
+      font-weight: 700;
+      gap: 14px;
+      border-bottom: 1px solid var(--border);
+      border-top-left-radius: var(--card-radius);
+      border-top-right-radius: var(--card-radius);
+      box-sizing: border-box;
+      flex-wrap: nowrap;
+      position: relative;
+    }
+    .green-dot {
+      display: inline-block;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--green);
+      margin-right: 9px;
+      vertical-align: middle;
+      box-shadow: 0 0 6px 2px #33ff588a;
+    }
+    .driver-card-header .driver-name {
+      font-size: 1.08em;
+      font-weight: 700;
+      color: #fff;
+      flex: 1 1 auto;
+      min-width: 0;
+      letter-spacing: 0.04em;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      white-space: normal;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .driver-card-header .driver-date {
+      font-size: 0.97em;
+      color: #d5f5ff;
+      background: #183350;
+      border-radius: 0.5em;
+      padding: 3px 8px;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-weight: 600;
+      width: 120px;
+      min-width: 120px;
+      max-width: 160px;
+      text-align: center;
+      flex-shrink: 0;
+      margin-right: 10px;
+      position: relative;
+      z-index: 1;
+      cursor: pointer;
+    }
+    .driver-card-header .driver-date[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer;}
+    .driver-card-header .driver-delete { color: var(--red); font-size: 1.14em; border: none; background: none; cursor: pointer; margin-left: auto; border-radius: 50%; padding: 0.07em 0.36em; transition: background 0.11s; flex-shrink: 0;}
+
+    /* --- TWO ROWS GRID LAYOUT FOR FIELDS --- */
+    .driver-fields-2rows {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 1em 1em;
+      padding: 16px 15px 0 15px;
+      align-items: center;
+      justify-items: stretch;
+    }
+    .driver-fields-2rows label {
+      font-size: 1em;
+      font-weight: 600;
+      color: #bbdefb;
+      font-family: inherit;
+      white-space: nowrap;
+      margin-bottom: 4px;
+    }
+    .driver-fields-2rows .grid-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .input-km-wrap {
+      display: flex;
+      align-items: center;
+      border-radius: 7px;
+      background: #212a40;
+      box-shadow: 0 1px 4px #009de018;
+      margin: 0.15em 0;
+      padding-left: 0.15em;
+      padding-right: 0.2em;
+    }
+    .input-km-wrap input[type="number"] {
+      width: 100%;
+      font-size: 1.07em;
+      padding: 0.42em 0.12em 0.42em 0.55em;
+      background: #212a40;
+      border: 1px solid #384164;
+      border-radius: 7px 0 0 7px;
+      color: #fff;
+      outline: none;
+      text-align: center;
+      font-family: inherit;
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: none;
+      min-width: 0;
+    }
+    .input-km-wrap .km-unit {
+      font-size: 0.98em;
+      color: #7ec5fd;
+      margin-left: 0.2em;
+      margin-right: 0.3em;
+      font-weight: 700;
+      white-space: nowrap;
+      background: transparent;
+      border: none;
+      padding: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+    .grid-time-wrap {
+      display: flex;
+      align-items: center;
+      background: #212a40;
+      border-radius: 7px;
+      box-shadow: 0 1px 4px #009de018;
+      margin: 0.15em 0;
+      padding-left: 0.15em;
+      padding-right: 0.2em;
+      position: relative;
+    }
+    .grid-time-wrap input[type="time"] {
+      width: 100%;
+      font-size: 1.07em;
+      padding: 0.42em 0.12em 0.42em 0.55em;
+      background: #212a40;
+      border: 1px solid #384164;
+      border-radius: 7px;
+      color: #fff;
+      outline: none;
+      text-align: center;
+      font-family: inherit;
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: none;
+      min-width: 0;
+      z-index: 2;
+    }
+    .time-picker-icon {
+      position: absolute;
+      right: 8px;
+      z-index: 3;
+      color: var(--primary);
+      font-size: 1.06em;
+      cursor: pointer;
+      top: 0; bottom: 0;
+      margin: auto 0;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+    .driver-km-result { margin: 0 0 2px 0; font-size: 1.08em; font-weight: 700; color: var(--primary); font-family: inherit; letter-spacing: 0.04em; text-align: left; padding: 0 15px; min-height: 21px; display: flex; align-items: center; gap: 0.4em;}
+    .driver-btns { display: flex; gap: 0.7em; margin-top: 8px; padding: 0 15px 15px 15px;}
+    .driver-btns button { flex: 1 1 0; font-size: 1.03em; font-weight: 700; border: none; border-radius: 9px; padding: 0.65em 0; background: linear-gradient(90deg,var(--primary),var(--primary-hover)); color: #fff; box-shadow: 0 1px 4px rgba(66,165,245,0.09); cursor: pointer; letter-spacing: 0.04em; transition: background 0.13s; min-width: 0; font-family: inherit;}
+    .driver-btns button:active { background: var(--primary-hover);}
+    .driver-btns .stop-btn { background: linear-gradient(90deg,#ff3b30 30%,#c11 100%); color: #fff; font-family: inherit;}
+    .driver-btns .stop-btn:active { background: #ff3b30;}
+    .driver-btns .disabled, .driver-btns button:disabled { opacity: 0.5; pointer-events: none;}
+    .how-to-use { width: 100vw; max-width: 1050px; margin: 18px auto 0 auto; padding: 13px 14px 11px 14px; background: #161a23cc; border-radius: 10px; color: #bbdefb; font-size: 0.97em; font-family: 'Poppins', Arial, sans-serif; text-align: left; line-height: 1.6; letter-spacing: 0.01em; box-shadow: 0 2px 8px #212a4033; box-sizing: border-box; overflow-x: hidden; align-self: center;}
+    /* Modal overlay: always above everything */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(13, 32, 70, 0.82);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-bg.active { display: flex;}
+    .modal-content {
+      background: var(--card-bg); color: var(--accent); border-radius: 18px;
+      border: 2px solid var(--primary); box-shadow: 0 7px 32px #42a5f547;
+      padding: 28px 30px 22px 30px; display: flex; flex-direction: column;
+      align-items: center; min-width: 270px; max-width: 95vw; min-height: 135px;
+      font-family: 'Poppins', Arial, sans-serif;
+      animation: pop .18s cubic-bezier(.45,1.4,.68,1.02); position: relative;
+    }
+    .modal-title { font-size: 1.12em; font-weight: 700; color: #fff; margin-bottom: 9px; text-align: center; letter-spacing: 0.02em;}
+    .modal-details { margin-bottom: 16px; color: var(--accent); font-size: 1em; font-weight: 500; text-align: center; word-break: break-word;}
+    .modal-done-btn { background: var(--primary); color: #fff; border: none; border-radius: 10px; font-size: 1.01em; font-weight: 700; padding: 10px 34px; cursor: pointer; transition: background 0.18s; margin-top: 2px; font-family: inherit; box-shadow: 0 2px 8px #42a5f533; letter-spacing: 0.03em;}
+    .modal-done-btn:hover { background: var(--primary-hover);}
+    .modal-close { position: absolute; top: 11px; right: 16px; background: none; border: none; color: #bbdefb; font-size: 1.22em; cursor: pointer; padding: 0; border-radius: 50%; transition: background 0.12s;}
+    .modal-close:active { background: #212a40;}
+    @keyframes pop { from { transform: scale(0.91); opacity: 0.3;} to   { transform: scale(1);    opacity: 1;} }
+    .modal-confirm { background: var(--card-bg); color: var(--accent); border-radius: 18px; border: 2px solid var(--red); box-shadow: 0 7px 32px #ff3b3047; padding: 22px 24px 18px 24px; display: flex; flex-direction: column; align-items: center; min-width: 230px; max-width: 95vw; min-height: 80px; font-family: 'Poppins', Arial, sans-serif; position: relative; animation: pop .18s cubic-bezier(.45,1.4,.68,1.02);}
+    .modal-confirm-title { font-size: 1.09em; font-weight: 700; color: #fff; margin-bottom: 9px; text-align: center; letter-spacing: 0.02em;}
+    .modal-confirm-details { margin-bottom: 16px; color: var(--accent); font-size: 1em; font-weight: 500; text-align: center; word-break: break-word;}
+    .modal-confirm-btns { display: flex; gap: 18px; margin-top: 5px;}
+    .modal-confirm-btn { background: var(--red); color: #fff; border: none; border-radius: 10px; font-size: 1.01em; font-weight: 700; padding: 7px 22px; cursor: pointer; transition: background 0.18s; font-family: inherit; box-shadow: 0 2px 8px #ff3b3033; letter-spacing: 0.03em;}
+    .modal-confirm-btn:hover { background: #c11;}
+    .modal-cancel-btn { background: var(--border); color: #bbdefb; border: none; border-radius: 10px; font-size: 1.01em; font-weight: 700; padding: 7px 22px; cursor: pointer; transition: background 0.18s; font-family: inherit; box-shadow: 0 2px 8px #212a4033; letter-spacing: 0.03em;}
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="header">
+      <div class="header-row">
+        <span class="header-title">
+          <i class="fas fa-car"></i> Delivery Drivers Log
+        </span>
+        <span class="header-desc">
+          Ravintola Tandoori Villa &nbsp;|&nbsp; Log car drivers' shift kilometers and time daily
+        </span>
+      </div>
+      <div class="header-btnbar">
+        <button class="reports-btn" id="showReportsBtn"><i class="fas fa-road"></i> Show KM Reports</button>
+        <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </div>
+    <div class="log-board" id="driverBoard"></div>
+    <div class="how-to-use" id="howToUse">
+      <b>How to use:</b><br>
+      1. Enter your shift's starting kilometers and time in, press <b>Start</b>.<br>
+      2. Enter your ending kilometers and time out, press <b>Stop</b>.<br>
+      3. See your shift summary and review reports.<br>
+      <hr>
+      <b>Note:</b> Only the logged-in driver can view and log their own shift.
+    </div>
+    <div class="modal-bg" id="modalBg">
+      <div class="modal-content" id="modalContent">
+        <button class="modal-close" id="modalClose" title="Close">&times;</button>
+        <div class="modal-title"><i class="fas fa-check-circle" style="color:var(--primary);"></i> Shift Log Saved</div>
+        <div class="modal-details" id="modalDetails"></div>
+        <button class="modal-done-btn" id="modalDone">Done</button>
+      </div>
+    </div>
+    <div class="modal-bg" id="confirmModalBg">
+      <div class="modal-confirm" id="confirmModalContent">
+        <div class="modal-confirm-title"><i class="fas fa-exclamation-triangle" style="color:var(--red);"></i> Confirm Delete</div>
+        <div class="modal-confirm-details" id="confirmModalDetails"></div>
+        <div class="modal-confirm-btns">
+          <button class="modal-confirm-btn" id="confirmDeleteBtn">Delete</button>
+          <button class="modal-cancel-btn" id="cancelDeleteBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-bg" id="logoutModalBg">
+      <div class="modal-confirm" id="logoutModalContent">
+        <div class="modal-confirm-title"><i class="fas fa-sign-out-alt" style="color:var(--primary);"></i> Confirm Logout</div>
+        <div class="modal-confirm-details" id="logoutModalDetails">Are you sure you want to logout?</div>
+        <div class="modal-confirm-btns">
+          <button class="modal-confirm-btn" id="confirmLogoutBtn">Logout</button>
+          <button class="modal-cancel-btn" id="cancelLogoutBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script>
+    // Auth check
+    const userData = JSON.parse(localStorage.getItem("user") || "null");
+    if (!userData) { window.location.href = "login.html"; }
+    const isAdmin = userData.role === "admin";
+    const currentUser = userData.name;
+
+    // Firebase setup
+    const firebaseConfig = {
+      apiKey: "AIzaSyCirYQ_46JiSkMIwCNs1nSi89dvB1MUg_A",
+      authDomain: "deliverylog12.firebaseapp.com",
+      databaseURL: "https://deliverylog12-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "deliverylog12",
+      storageBucket: "deliverylog12.firebasestorage.app",
+      messagingSenderId: "19081371357",
+      appId: "1:19081371357:web:b9b59e732a4d90d4d44534",
+      measurementId: "G-FSZXXZQSL0"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let allUsers = {};
+    let driverState = {};
+
+    // Modal logic
+    function showModal(detailsHtml) {
+      document.getElementById('modalDetails').innerHTML = detailsHtml;
+      document.getElementById('modalBg').classList.add('active');
+      setTimeout(() => { document.getElementById('modalDone').focus(); }, 100);
+    }
+    function hideModal() { document.getElementById('modalBg').classList.remove('active'); }
+    document.getElementById('modalClose').onclick = hideModal;
+    document.getElementById('modalDone').onclick = hideModal;
+    document.getElementById('modalBg').onclick = function(e) { if (e.target === document.getElementById('modalBg')) hideModal(); };
+
+    // Confirm modal logic (unchanged)
+    function showConfirmModal(userId, userName) {
+      document.getElementById('confirmModalDetails').innerHTML = `Are you sure you want to delete <b>${userName}</b>? This cannot be undone.`;
+      document.getElementById('confirmModalBg').classList.add('active');
+      pendingDeleteDriverId = userId;
+      setTimeout(() => { document.getElementById('confirmDeleteBtn').focus(); }, 100);
+    }
+    function hideConfirmModal() { document.getElementById('confirmModalBg').classList.remove('active'); pendingDeleteDriverId = null; }
+    document.getElementById('cancelDeleteBtn').onclick = hideConfirmModal;
+    document.getElementById('confirmModalBg').onclick = function(e) { if (e.target === document.getElementById('confirmModalBg')) hideConfirmModal(); };
+    document.getElementById('confirmDeleteBtn').onclick = function() {
+      if (pendingDeleteDriverId) {
+        db.ref("users/" + pendingDeleteDriverId).remove();
+        db.ref("driverStates/" + pendingDeleteDriverId).remove();
+        hideConfirmModal();
+      }
+    };
+    let pendingDeleteDriverId = null;
+
+    document.getElementById("showReportsBtn").onclick = () => { window.location.href = "reports.html"; };
+    document.getElementById("logoutBtn").onclick = () => { document.getElementById("logoutModalBg").classList.add('active'); setTimeout(() => { document.getElementById("confirmLogoutBtn").focus(); }, 100);}
+    document.getElementById("cancelLogoutBtn").onclick = () => { document.getElementById("logoutModalBg").classList.remove('active'); };
+    document.getElementById("logoutModalBg").onclick = function(e) { if (e.target === document.getElementById("logoutModalBg")) document.getElementById("logoutModalBg").classList.remove('active'); };
+    document.getElementById("confirmLogoutBtn").onclick = function() { localStorage.removeItem('user'); window.location.href = "login.html"; };
+
+    db.ref("users").on("value", snap => {
+      allUsers = snap.val() || {};
+      renderDrivers();
+    });
+
+    db.ref("driverStates").on("value", snap => {
+      const states = snap.val() || {};
+      Object.entries(states).forEach(([userId, state]) => {
+        if (!driverState[userId]) driverState[userId] = {};
+        Object.assign(driverState[userId], state);
+      });
+      renderDrivers();
+    });
+
+    function updateDriverState(userId) {
+      db.ref("driverStates/" + userId).set(driverState[userId]);
+    }
+
+    function pad2(n){return String(n).padStart(2,'0');}
+    function toDisplayDate(isoStr) {
+      if (!isoStr) return '';
+      const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      const [y, m, d] = isoStr.split('-');
+      const mIndex = parseInt(m,10)-1;
+      return `${pad2(d)}/${months[mIndex]}/${y}`;
+    }
+
+    function renderDrivers() {
+      const driverBoard = document.getElementById('driverBoard');
+      driverBoard.innerHTML = "";
+      Object.entries(allUsers).forEach(([userId, userObj]) => {
+        // Show only the logged-in user's driver card unless admin
+        if (!isAdmin && userObj.name !== currentUser) return;
+
+        if (!driverState[userId]) driverState[userId] = {
+          kmIn: "",
+          kmOut: "",
+          running: false,
+          date: (new Date()).toISOString().slice(0,10),
+          timeIn: "",
+          timeOut: "",
+          stopped: false
+        };
+        const s = driverState[userId];
+        const card = document.createElement('div');
+        card.className = 'driver-card' + (s.running ? ' active' : '');
+
+        // HEADER
+        const headerRow = document.createElement('div');
+        headerRow.className = 'driver-card-header';
+        // Green dot
+        const greenDot = document.createElement('span');
+        greenDot.className = 'green-dot';
+        greenDot.style.display = s.running ? "inline-block" : "none";
+        headerRow.appendChild(greenDot);
+
+        const nameEl = document.createElement('span');
+        nameEl.className = 'driver-name';
+        nameEl.textContent = userObj.name;
+        const dateEl = document.createElement('input');
+        dateEl.type = 'date';
+        dateEl.className = 'driver-date';
+        dateEl.value = s.date;
+        dateEl.maxLength = 10;
+        dateEl.disabled = s.running;
+        dateEl.onfocus = function() {
+          dateEl.disabled = false;
+        };
+        dateEl.onblur = function() {
+          dateEl.disabled = s.running;
+        };
+        dateEl.onchange = e => {
+          const val = e.target.value.trim();
+          if (/^\d{4}-\d{2}-\d{2}$/.test(val)) {
+            s.date = val;
+            updateDriverState(userId);
+            renderDrivers();
+          } else {
+            e.target.value = s.date;
+          }
+        };
+        dateEl.onclick = function(e) { 
+          if(dateEl.disabled) {
+            dateEl.disabled = false;
+            setTimeout(() => { 
+              dateEl.showPicker && dateEl.showPicker(); 
+            }, 10);
+          } else {
+            dateEl.showPicker && dateEl.showPicker();
+          } 
+        };
+        dateEl.onkeyup = function(e) {
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(dateEl.value)) {
+            dateEl.value = s.date;
+          }
+        };
+        if (isAdmin) {
+          const delBtn = document.createElement('button');
+          delBtn.className = 'driver-delete';
+          delBtn.title = "Remove driver";
+          delBtn.innerHTML = "<i class='fas fa-trash'></i>";
+          delBtn.onclick = () => showConfirmModal(userId, userObj.name);
+          headerRow.appendChild(nameEl);
+          headerRow.appendChild(dateEl);
+          headerRow.appendChild(delBtn);
+        } else {
+          headerRow.appendChild(nameEl);
+          headerRow.appendChild(dateEl);
+        }
+        card.appendChild(headerRow);
+
+        // --- 2 ROWS FIELDS ---
+        const fieldsGrid = document.createElement('div');
+        fieldsGrid.className = 'driver-fields-2rows';
+
+        // KM IN (Top Left)
+        const cellKmIn = document.createElement('div');
+        cellKmIn.className = 'grid-cell';
+        const kmInLbl = document.createElement('label');
+        kmInLbl.textContent = "KM In";
+        const kmInWrap = document.createElement('span');
+        kmInWrap.className = 'input-km-wrap';
+        const kmIn = document.createElement('input');
+        kmIn.type = 'number';
+        kmIn.placeholder = 'Start';
+        kmIn.value = s.kmIn;
+        kmIn.disabled = s.running;
+        kmIn.maxLength = 9;
+        kmIn.onfocus = function() {
+          kmIn.disabled = false;
+        };
+        kmIn.onblur = function(e) {
+          kmIn.disabled = s.running;
+          if (e.target.value.length < 1 || e.target.value.length > 9) return;
+          s.kmIn = e.target.value;
+          updateDriverState(userId);
+          renderKmResult();
+        };
+        kmIn.oninput = function(e) {
+          s.kmIn = e.target.value;
+        };
+        const kmInUnit = document.createElement('span');
+        kmInUnit.className = 'km-unit';
+        kmInUnit.textContent = "Km";
+        kmInWrap.appendChild(kmIn);
+        kmInWrap.appendChild(kmInUnit);
+        cellKmIn.appendChild(kmInLbl);
+        cellKmIn.appendChild(kmInWrap);
+
+        // KM OUT (Top Right)
+        const cellKmOut = document.createElement('div');
+        cellKmOut.className = 'grid-cell';
+        const kmOutLbl = document.createElement('label');
+        kmOutLbl.textContent = "KM Out";
+        const kmOutWrap = document.createElement('span');
+        kmOutWrap.className = 'input-km-wrap';
+        const kmOut = document.createElement('input');
+        kmOut.type = 'number';
+        kmOut.placeholder = 'End';
+        kmOut.value = s.kmOut;
+        kmOut.disabled = !s.running;
+        kmOut.maxLength = 9;
+        kmOut.onfocus = function() {
+          kmOut.disabled = false;
+        };
+        kmOut.onblur = function(e) {
+          kmOut.disabled = !s.running;
+          if (e.target.value.length < 1 || e.target.value.length > 9) return;
+          s.kmOut = e.target.value;
+          updateDriverState(userId);
+          renderKmResult();
+        };
+        kmOut.oninput = function(e) {
+          s.kmOut = e.target.value;
+        };
+        const kmOutUnit = document.createElement('span');
+        kmOutUnit.className = 'km-unit';
+        kmOutUnit.textContent = "Km";
+        kmOutWrap.appendChild(kmOut);
+        kmOutWrap.appendChild(kmOutUnit);
+        cellKmOut.appendChild(kmOutLbl);
+        cellKmOut.appendChild(kmOutWrap);
+
+        // TIME IN (Bottom Left)
+        const cellTimeIn = document.createElement('div');
+        cellTimeIn.className = 'grid-cell';
+        const timeInLbl = document.createElement('label');
+        timeInLbl.textContent = "Time In";
+        const timeInWrap = document.createElement('span');
+        timeInWrap.className = 'grid-time-wrap';
+        const timeIn = document.createElement('input');
+        timeIn.type = 'time';
+        timeIn.value = s.timeIn;
+        timeIn.disabled = s.running;
+        timeIn.oninput = function(e) {
+          s.timeIn = e.target.value;
+          updateDriverState(userId);
+        };
+        timeInWrap.appendChild(timeIn);
+
+        // Time In Icon
+        const timeInIcon = document.createElement('button');
+        timeInIcon.className = 'time-picker-icon';
+        timeInIcon.type = 'button';
+        timeInIcon.title = "Pick Time";
+        timeInIcon.innerHTML = `<i class="far fa-clock"></i>`;
+        timeInIcon.onclick = function(e) {
+          e.preventDefault();
+          if (timeIn.disabled) return;
+          timeIn.showPicker && timeIn.showPicker();
+          timeIn.focus();
+        };
+        timeInWrap.appendChild(timeInIcon);
+
+        cellTimeIn.appendChild(timeInLbl);
+        cellTimeIn.appendChild(timeInWrap);
+
+        // TIME OUT (Bottom Right)
+        const cellTimeOut = document.createElement('div');
+        cellTimeOut.className = 'grid-cell';
+        const timeOutLbl = document.createElement('label');
+        timeOutLbl.textContent = "Time Out";
+        const timeOutWrap = document.createElement('span');
+        timeOutWrap.className = 'grid-time-wrap';
+        const timeOut = document.createElement('input');
+        timeOut.type = 'time';
+        timeOut.value = s.timeOut;
+        timeOut.disabled = !s.running;
+        timeOut.oninput = function(e) {
+          s.timeOut = e.target.value;
+          updateDriverState(userId);
+        };
+        timeOutWrap.appendChild(timeOut);
+
+        // Time Out Icon
+        const timeOutIcon = document.createElement('button');
+        timeOutIcon.className = 'time-picker-icon';
+        timeOutIcon.type = 'button';
+        timeOutIcon.title = "Pick Time";
+        timeOutIcon.innerHTML = `<i class="far fa-clock"></i>`;
+        timeOutIcon.onclick = function(e) {
+          e.preventDefault();
+          if (timeOut.disabled) return;
+          timeOut.showPicker && timeOut.showPicker();
+          timeOut.focus();
+        };
+        timeOutWrap.appendChild(timeOutIcon);
+
+        cellTimeOut.appendChild(timeOutLbl);
+        cellTimeOut.appendChild(timeOutWrap);
+
+        // Add to grid: top left, top right, bottom left, bottom right
+        fieldsGrid.appendChild(cellKmIn);
+        fieldsGrid.appendChild(cellKmOut);
+        fieldsGrid.appendChild(cellTimeIn);
+        fieldsGrid.appendChild(cellTimeOut);
+
+        card.appendChild(fieldsGrid);
+
+        // KM Result
+        const kmResult = document.createElement('div');
+        kmResult.className = 'driver-km-result';
+        function renderKmResult() {
+          if(s.kmIn && s.kmOut && 
+             !isNaN(+s.kmIn) && !isNaN(+s.kmOut) && 
+             +s.kmOut >= +s.kmIn && 
+             s.kmIn.length >= 1 && s.kmIn.length <= 9 &&
+             s.kmOut.length >= 1 && s.kmOut.length <= 9
+          ) {
+            kmResult.innerHTML = `<i class="fas fa-road"></i> Today: <span style="font-weight:900;color:var(--primary)">` + (+s.kmOut - +s.kmIn) + ` km</span>`;
+          } else { kmResult.textContent = ''; }
+        }
+        renderKmResult();
+        card.appendChild(kmResult);
+
+        // Button Row
+        const btns = document.createElement('div');
+        btns.className = 'driver-btns';
+        const startBtn = document.createElement('button');
+        startBtn.innerHTML = `<i class="fas fa-play"></i> Start`;
+        startBtn.disabled = s.running || !s.kmIn || !s.date || s.kmIn.length < 1 || s.kmIn.length > 9 || !s.timeIn;
+        startBtn.onclick = () => {
+          s.running = true;
+          s.stopped = false;
+          startBtn.disabled = true;
+          stopBtn.disabled = false;
+          kmIn.disabled = true;
+          kmOut.disabled = false;
+          timeIn.disabled = true;
+          timeOut.disabled = false;
+          card.classList.add('active');
+          greenDot.style.display = "inline-block";
+          updateDriverState(userId);
+        };
+        btns.appendChild(startBtn);
+
+        const stopBtn = document.createElement('button');
+        stopBtn.innerHTML = `<i class="fas fa-stop"></i> Stop`;
+        stopBtn.className = "stop-btn";
+        stopBtn.disabled = !s.running || !s.kmOut || s.kmOut.length < 1 || s.kmOut.length > 9 || !s.timeOut;
+        stopBtn.onclick = () => {
+          if (!s.kmOut || Number(s.kmOut) < Number(s.kmIn)) {
+            alert("Enter valid ending km (greater than or equal to start)");
+            return;
+          }
+          // Store all fields before clearing for the modal
+          const summary = {
+            name: userObj.name,
+            date: s.date,
+            kmIn: s.kmIn,
+            kmOut: s.kmOut,
+            totalKm: (+s.kmOut - +s.kmIn),
+            timeIn: s.timeIn,
+            timeOut: s.timeOut
+          };
+
+          s.stopped = true;
+          s.running = false;
+          stopBtn.disabled = true;
+          startBtn.disabled = false;
+          kmIn.disabled = false;
+          kmOut.disabled = true;
+          timeIn.disabled = false;
+          timeOut.disabled = true;
+          card.classList.remove('active');
+          greenDot.style.display = "none";
+          updateDriverState(userId);
+          renderKmResult();
+
+          // Show modal BEFORE clearing fields
+          showModal(
+            `<b><i class="fas fa-user"></i> ${summary.name}</b><br>
+            <span style="color:#fff;">${toDisplayDate(summary.date)}</span><br>
+            <span style="color:var(--primary)">Total: ${summary.totalKm} km</span><br>
+            <span>Time In: ${summary.timeIn || '-'}</span><br>
+            <span>Time Out: ${summary.timeOut || '-'}</span>`
+          );
+
+          db.ref("logs").push({
+            date: summary.date,
+            name: summary.name,
+            kmIn: summary.kmIn,
+            kmOut: summary.kmOut,
+            totalKm: summary.totalKm.toString(),
+            timeIn: summary.timeIn || "",
+            timeOut: summary.timeOut || "",
+            timestamp: new Date().toISOString()
+          });
+
+          // Clear after modal shown!
+          s.kmIn = ""; s.kmOut = ""; s.timeIn = ""; s.timeOut = ""; s.stopped = false;
+          updateDriverState(userId);
+          renderDrivers();
+        };
+        btns.appendChild(stopBtn);
+        card.appendChild(btns);
+
+        driverBoard.appendChild(card);
+      });
+    }
+
+    setInterval(() => {
+      Array.from(driverBoard.children).forEach((card, i) => {
+        // Only update the visible cards, which are the logged-in user (unless admin)
+        const userId = Object.keys(allUsers).filter((uid) => isAdmin || allUsers[uid].name === currentUser)[i];
+        const s = driverState[userId];
+        if (!s) return;
+        const btns = card.querySelectorAll('.driver-btns button');
+        const kmIn = card.querySelector('.driver-fields-2rows .grid-cell:nth-child(1) input[type="number"]');
+        const kmOut = card.querySelector('.driver-fields-2rows .grid-cell:nth-child(2) input[type="number"]');
+        const timeIn = card.querySelector('.driver-fields-2rows .grid-cell:nth-child(3) input[type="time"]');
+        const timeOut = card.querySelector('.driver-fields-2rows .grid-cell:nth-child(4) input[type="time"]');
+        const greenDot = card.querySelector('.green-dot');
+        if (btns.length === 2) {
+          btns[0].disabled = s.running || !s.kmIn || !s.date || s.kmIn.length < 1 || s.kmIn.length > 9 || !s.timeIn;
+          btns[1].disabled = !s.running || !s.kmOut || s.kmOut.length < 1 || s.kmOut.length > 9 || !s.timeOut;
+        }
+        if (kmIn) kmIn.disabled = s.running;
+        if (kmOut) kmOut.disabled = !s.running;
+        if (timeIn) timeIn.disabled = s.running;
+        if (timeOut) timeOut.disabled = !s.running;
+        if (greenDot) greenDot.style.display = s.running ? "inline-block" : "none";
+        const kmResult = card.querySelector('.driver-km-result');
+        if(kmResult) {
+          if(s.kmIn && s.kmOut && !isNaN(+s.kmIn) && !isNaN(+s.kmOut) && +s.kmOut >= +s.kmIn && s.kmIn.length >= 1 && s.kmIn.length <= 9 && s.kmOut.length >= 1 && s.kmOut.length <= 9) {
+            kmResult.innerHTML = `<i class="fas fa-road"></i> Today: <span style="font-weight:900;color:var(--primary)">` + (+s.kmOut - +s.kmIn) + ` km</span>`;
+          } else { kmResult.textContent = ''; }
+        }
+        if (s.running) card.classList.add('active');
+        else card.classList.remove('active');
+      });
+    }, 350);
+
+  </script>
+</body>
+</html>
